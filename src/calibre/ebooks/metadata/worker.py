@@ -7,7 +7,7 @@ import shutil
 from calibre.customize.ui import run_plugins_on_import
 from calibre.ebooks.metadata.meta import metadata_from_formats
 from calibre.ebooks.metadata.opf2 import metadata_to_opf
-from calibre.utils.filenames import samefile
+from calibre.utils.filenames import make_long_path_useable, samefile
 from calibre.utils.icu import lower as icu_lower
 
 
@@ -65,6 +65,8 @@ def run_import_plugins(paths, group_id, tdir):
             ext = os.path.splitext(nfp)[1]
             path = os.path.join(tdir, str(group_id), name + ext)
             os.makedirs(os.path.dirname(path), exist_ok=True)
+            path = make_long_path_useable(path)
+            nfp = make_long_path_useable(nfp)
             try:
                 os.replace(nfp, path)
             except OSError:
