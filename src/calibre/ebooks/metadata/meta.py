@@ -10,6 +10,7 @@ from calibre.customize.ui import get_file_type_metadata, set_file_type_metadata
 from calibre.ebooks.metadata import MetaInformation, string_to_authors
 from calibre.ebooks.metadata.opf2 import OPF
 from calibre.utils.config import prefs
+from calibre.utils.filenames import make_long_path_useable
 from calibre.utils.localization import _
 
 # The priorities for loading metadata from different file types
@@ -65,7 +66,7 @@ def _metadata_from_formats(formats, force_read_metadata=False, pattern=None):
             return mi2
 
     for path, ext in zip(formats, extensions):
-        with open(path, 'rb') as stream:
+        with open(make_long_path_useable(path), 'rb') as stream:
             try:
                 newmi = get_metadata(
                     stream,
@@ -232,7 +233,7 @@ def opf_metadata(opfpath):
         f = opfpath
         opfpath = getattr(f, 'name', os.getcwd())
     else:
-        f = open(opfpath, 'rb')
+        f = open(make_long_path_useable(opfpath), 'rb')
     try:
         opf = OPF(f, os.path.dirname(opfpath))
         if opf.application_id is not None:
